@@ -9,14 +9,38 @@ const Menu = () => (
   </div>
 )
 
-const AnecdoteList = ({ anecdotes }) => (
-  <div>
-    <h2>Anecdotes</h2>
-    <ul>
-      {anecdotes.map(anecdote => <li key={anecdote.id} >{anecdote.content}</li>)}
-    </ul>  
-  </div>
-)
+const AnecdoteList = ({ anecdotes }) => { 
+  return(
+    <div>
+      <h2>Anecdotes</h2>
+      <ul>
+        {anecdotes.map(anecdote => 
+          <li key={anecdote.id} >
+            <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
+          </li>)}
+      </ul>  
+    </div>
+  )
+}
+
+const Anecdote = ({ anecdote }) => {
+  return(
+    <div>
+      <h2>{anecdote.content} </h2>
+      <p>has {anecdote.votes} votes</p>
+      <p>for more information see <a href={anecdote.info}>{anecdote.info}</a></p>
+    </div>
+  )
+}
+
+const Notification = ({ message }) => {
+  if (message === null) return null
+  return(
+    <div>
+      <p>{message}</p>
+    </div>
+  )
+}
 
 const About = () => (
   <div>
@@ -63,6 +87,11 @@ class CreateNew extends React.Component {
       info: this.state.info,
       votes: 0
     })
+    this.props.history.push('/')
+    this.props.setNotification('A new anecdote \'' + this.state.content + '\' was created')
+    setTimeout( () => {
+      this.props.setNotification(null)
+    }, 10000)
   }
 
   render() {
@@ -136,14 +165,28 @@ class App extends React.Component {
     this.setState({ anecdotes })
   }
 
+  setNotification = () => (notification) => {
+    this.setState( { notification: notification })
+  }
+
   render() {
     return (
       <Router>
       <div>
         <h1>Software anecdotes</h1>
         <Route path="/" render={() => <Menu />} />  
-        <Route path="/anecdotes" 
-          render= { () => { 
+        <Route path="/" render={() => <Notification message={this.state.notification} />} />  
+        <Route exact path="/" 
+          render = { () => { 
+            return ( 
+              <div>
+                <AnecdoteList anecdotes={this.state.anecdotes}/> 
+              </div>
+            ) 
+          } } 
+        /> 
+        <Route exact path="/anecdotes" 
+          render = { () => { 
             return ( 
               <div>
                 <AnecdoteList anecdotes={this.state.anecdotes}/> 
@@ -152,16 +195,16 @@ class App extends React.Component {
           } } 
         /> 
         <Route path="/createnew" 
-          render= { () => { 
+          render = { ({history}) => { 
             return ( 
               <div>
-                <CreateNew addNew={this.addNew}/> 
+                <CreateNew history={history} addNew={this.addNew} setNotification={this.setNotification()}/> 
               </div>
             ) 
           } } 
         /> 
         <Route path="/about" 
-          render= { () => { 
+          render = { () => { 
             return ( 
               <div>
                 <About/> 
@@ -169,6 +212,10 @@ class App extends React.Component {
             ) 
           } } 
         /> 
+        <Route exact path="/anecdotes/:id" 
+          render = { ( { match } ) =>
+          <Anecdote anecdote = { this.anecdoteById( match.params.id ) } /> }
+        />
         <Route path="/" render={() => <Footer />} />  
       </div>
       </Router>
