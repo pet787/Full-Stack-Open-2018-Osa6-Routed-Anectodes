@@ -1,13 +1,48 @@
 import React from 'react'
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Link, NavLink } from 'react-router-dom'
 
-const Menu = () => (
-  <div>    
-    <Link to="/anecdotes">anecdotes</Link> &nbsp;
-    <Link to="/createnew">create new</Link> &nbsp;
-    <Link to="/about">about</Link> &nbsp;
-  </div>
-)
+const Menu = () => {
+  const unactiveStyle = {
+    background: 'lightblue',
+    color: 'black',
+    display: 'block',
+    textAlign: 'center',
+    padding: 10,
+    textDecoration: 'none',
+   }
+
+  const activeStyle = {
+    fontWeight: 'bold',
+    background: 'black',
+    color: 'white',
+    display: 'block',
+    textAlign: 'center',
+    padding: 10,
+    textDecoration: 'none',
+   }
+
+   const ulStyle = {
+    listStyleType: 'none',
+    background: 'lightblue',
+    overflow: 'hidden',
+    margin: 0,
+    padding: 0,
+   }
+
+   const liStyle = {
+    float: 'left',
+   }
+   
+   return (
+    <div>
+    <ul style={ulStyle} > 
+      <li style={liStyle} ><NavLink to="/anecdotes" style={unactiveStyle} activeStyle={activeStyle}>anecdotes</NavLink></li>
+      <li style={liStyle} ><NavLink to="/createnew" style={unactiveStyle} activeStyle={activeStyle}>create new</NavLink></li>
+      <li style={liStyle} ><NavLink to="/about" style={unactiveStyle} activeStyle={activeStyle}>about</NavLink></li>
+     </ul>
+     </div>
+  )
+}
 
 const AnecdoteList = ({ anecdotes }) => { 
   return(
