@@ -1,5 +1,6 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Link, NavLink } from 'react-router-dom'
+//import { ListGroup, ListGroupItem } from 'react-bootstrap'
 
 const Menu = () => {
   const unactiveStyle = {
@@ -44,13 +45,13 @@ const Menu = () => {
   )
 }
 
-const AnecdoteList = ({ anecdotes }) => { 
+const AnecdoteList = ({ anecdotes }) => {  
   return(
     <div>
       <h2>Anecdotes</h2>
-      <ul>
+      <ul class='list-group'>
         {anecdotes.map(anecdote => 
-          <li key={anecdote.id} >
+          <li class='list-group-item' key={anecdote.id} >
             <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
           </li>)}
       </ul>  
