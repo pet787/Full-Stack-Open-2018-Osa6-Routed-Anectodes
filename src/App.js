@@ -35,8 +35,17 @@ const Anecdote = ({ anecdote }) => {
 
 const Notification = ({ message }) => {
   if (message === null) return null
+  const style={
+    color: 'green',
+    background: 'lightgrey',
+    fontSize: 20,
+    borderStyle: 'solid',
+    borderRadius: 5,
+    padding: 5,
+    marginBottom: 5
+  }
   return(
-    <div>
+    <div style={style}>
       <p>{message}</p>
     </div>
   )
@@ -140,7 +149,7 @@ class App extends React.Component {
           id: '2'
         }
       ],
-      notification: ''
+      notification: null
     } 
   }
 
