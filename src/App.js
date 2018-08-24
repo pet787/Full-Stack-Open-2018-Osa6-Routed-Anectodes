@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Link, NavLink } from 'react-router-dom'
-import { Media} from 'react-bootstrap'
+import { Media, PageHeader, Badge, Button, OverlayTrigger, Tooltip, Well, FormGroup, ControlLabel, FormControl, Alert } from 'react-bootstrap'
 
 const Menu = () => {
   const unactiveStyle = {
@@ -63,7 +63,7 @@ const Anecdote = ({ anecdote }) => {
   return(
     <div>
       <h2>{anecdote.content} </h2>
-      <p>has {anecdote.votes} votes</p>
+      <p>has <Badge>{anecdote.votes}</Badge> votes</p>
       <p>for more information see <a href={anecdote.info}>{anecdote.info}</a></p>
     </div>
   )
@@ -81,8 +81,8 @@ const Notification = ({ message }) => {
     marginBottom: 5
   }
   return(
-    <div style={style}>
-      <p>{message}</p>
+    <div>
+      <Alert bsStyle="info">{message}</Alert>
     </div>
   )
 }
@@ -110,9 +110,10 @@ const About = () => (
 
 const Footer = () => (
   <div>
-    Anecdote app for <a href='https://courses.helsinki.fi/fi/TKT21009/121540749'>Full Stack -sovelluskehitys</a>.
-
-    See <a href='https://github.com/mluukkai/routed-anecdotes'>https://github.com/mluukkai/routed-anecdotes</a> for the source code. 
+    <Well bsSize="large">
+      Anecdote app for <a href='https://courses.helsinki.fi/fi/TKT21009/121540749'>Full Stack -sovelluskehitys</a>.
+      See <a href='https://github.com/mluukkai/routed-anecdotes'>https://github.com/mluukkai/routed-anecdotes</a> for the source code. 
+    </Well>
   </div>
 )
 
@@ -146,24 +147,48 @@ class CreateNew extends React.Component {
     }, 10000)
   }
 
+  
   render() {
+
+    const tooltip = (
+      <Tooltip id="tooltip">
+        <strong>Caution</strong> What Happens on the Internet, Stays on the Internet. Forever
+      </Tooltip>
+    )
+
     return(
       <div>
         <h2>create a new anecdote</h2>
         <form onSubmit={this.handleSubmit}>
-          <div>
-            content 
-            <input name='content' value={this.state.content} onChange={this.handleChange} />
-          </div>
-          <div>
-            author
-            <input name='author' value={this.state.author} onChange={this.handleChange} />
-          </div>
-          <div>
-            url for more info
-            <input name='info' value={this.state.info} onChange={this.handleChange} />
-          </div> 
-          <button>create</button>
+          <FormGroup>
+          <ControlLabel>Content</ControlLabel>
+          <FormControl
+            name='content'
+            type='text'
+            value={this.state.content}
+            placeholder='Enter anecdote'
+            onChange={this.handleChange}
+          />
+          <ControlLabel>Author</ControlLabel>
+          <FormControl
+            name='author'
+            type='text'
+            value={this.state.author}
+            placeholder='Enter author'
+            onChange={this.handleChange}
+          />          
+          <ControlLabel>Url for more info</ControlLabel>
+          <FormControl
+            name='info'
+            type='text'
+            value={this.state.info}
+            placeholder='Enter url for more information'
+            onChange={this.handleChange}
+          />          
+         </FormGroup>
+          <OverlayTrigger placement="right" overlay={tooltip}>
+            <Button onClick={this.handleSubmit} >Create</Button>
+          </OverlayTrigger>
         </form>
       </div>  
     )
@@ -225,9 +250,11 @@ class App extends React.Component {
     return (
       <Router>
       <div>
-        <h1>Software anecdotes</h1>
         <Route path="/" render={() => <Menu />} />  
         <Route path="/" render={() => <Notification message={this.state.notification} />} />  
+        <PageHeader>
+          Software anecdotes
+        </PageHeader>
         <Route exact path="/" 
           render = { () => { 
             return ( 
